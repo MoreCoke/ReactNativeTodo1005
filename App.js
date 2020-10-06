@@ -38,18 +38,6 @@ class App extends React.Component {
     todoViewModel.appDie();
   }
 
-  renderTodoItems() {
-    return todoViewModel.todoItems.map((element) => (
-      <TodoItem
-        task={element}
-        del={() => todoViewModel.deleteTodo(element['id'])}
-        toggleBoolean={() => todoViewModel.markTodo(element['id'])}
-        editTodo={todoViewModel.editTodo}
-        key={element['id']}
-      />
-    ));
-  }
-
   render() {
     return (
       <>
@@ -92,7 +80,7 @@ class App extends React.Component {
               </View>
               <View style={styles.sectionContainer}>
                 <FlatList
-                  data={todoViewModel.todos}
+                  data={todoViewModel.todoItems}
                   keyExtractor={(element) => element['id'].toString()}
                   renderItem={({item}) => (
                     <TodoItem
