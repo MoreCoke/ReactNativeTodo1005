@@ -1,61 +1,86 @@
-import {action, computed, observable, reaction, runInAction} from 'mobx';
+import {
+  action,
+  computed,
+  observable,
+  reaction,
+  runInAction,
+  makeObservable,
+} from 'mobx';
 import {delay, fakeData} from './utils';
 
 export const todosPerPage = 5;
 
 export default class todoViewModel {
-  @observable todos = [];
-  @observable text = '';
-  @observable allCompleted = false;
-  @observable loading = false;
-
+  todos = [];
+  text = '';
+  allCompleted = false;
+  loading = false;
   page = 1;
   logReaction = null;
 
-  @computed get todoItems() {
+  get todoItems() {
     return this.todos.filter((element) =>
       this.allCompleted ? element['isCompleted'] : true,
     );
   }
 
-  @action.bound updateAddInputValue(evt) {
-    this.text = evt.target.value;
+  constructor() {
+    makeObservable(this, {
+      todos: observable,
+      text: observable,
+      allCompleted: observable,
+      loading: observable,
+      todoItems: computed,
+      updateAddInputValue: action,
+      addTodo: action,
+      deleteTodo: action,
+      editTodo: action,
+      markTodo: action,
+      allTodo: action,
+      allDoneTodo: action,
+      query: action,
+    });
   }
 
-  @action.bound addTodo() {
+  updateAddInputValue = (text) => {
+    this.text = text;
+    console.log('updateAddInputValue', this.text);
+  };
+
+  addTodo = () => {
     const todo = {
       text: this.text,
       isCompleted: false,
       id: new Date().getTime(),
     };
+    console.log('this from todoViewModel', this);
     this.todos.unshift(todo);
     this.text = '';
-  }
+  };
 
-  @action.bound deleteTodo(id) {
+  deleteTodo = (id) => {
     this.todos = this.todos.filter((element) => element['id'] !== id);
-  }
+  };
 
-  @action.bound editTodo(id, text) {
+  editTodo = (id, text) => {
     const index = this.todos.map((element) => element['id']).indexOf(id);
     this.todos[index].text = text;
-  }
-  @action.bound markTodo(id) {
+  };
+  markTodo = (id) => {
     const index = this.todos.map((element) => element['id']).indexOf(id);
     this.todos[index].isCompleted = !this.todos[index].isCompleted;
-  }
+  };
 
-  @action.bound allTodo() {
+  allTodo = () => {
     this.allCompleted = false;
-  }
+  };
 
-  @action.bound allDoneTodo() {
+  allDoneTodo = () => {
     this.allCompleted = true;
-  }
+  };
 
-  @action.bound async query() {
+  query = async () => {
     this.loading = true;
-
     const list = await delay(500).then(() => {
       const pageTodoStart = (this.page - 1) * 5;
       const pageTodoEnd = this.page * todosPerPage;
@@ -73,17 +98,17 @@ export default class todoViewModel {
       this.todos = this.todos.concat(list);
       this.loading = false;
     });
-  }
+  };
 
-  appInit() {
+  appInit = () => {
     this.query();
     this.logReaction = reaction(
       () => this.todos.map((element) => element.text),
       (text) => console.log(text),
     );
-  }
+  };
 
-  appDie() {
+  appDie = () => {
     this.logReaction();
-  }
+  };
 }

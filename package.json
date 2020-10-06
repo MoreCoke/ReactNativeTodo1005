@@ -10,7 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "mobx": "^6.0.0",
+    "@react-native-community/checkbox": "^0.5.5",
+    "mobx": "^6.0.1",
     "mobx-react": "^7.0.0",
     "react": "16.13.1",
     "react-native": "0.63.3"

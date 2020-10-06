@@ -1,48 +1,66 @@
 import React from 'react';
+import {View, Text, TextInput, Button} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import {observer} from 'mobx-react';
-import {observable, action} from 'mobx';
+import {makeObservable, observable, action} from 'mobx';
 
 @observer
 class TodoItem extends React.Component {
-  @observable editText = this.props.task.text;
-  @observable isEdited = false;
+  editText = this.props.task.text;
+  isEdited = false;
 
-  @action.bound updateEditInputValue(evt) {
-    this.editText = evt.target.value;
+  constructor() {
+    makeObservable(this, {
+      editText: observable,
+      isEdited: observable,
+      updateEditInputValue: action,
+      editTodo: action,
+    });
   }
 
-  @action.bound editTodo(id) {
+  updateEditInputValue = (evt) => {
+    this.editText = evt.target.value;
+  };
+
+  editTodo = (id) => {
     const {editTodo} = this.props;
     editTodo(id, this.editText);
     this.isEdited = !this.isEdited;
-  }
+  };
 
   render() {
     const {task, toggleBoolean, del} = this.props;
     return (
-      <li className="list-item">
-        <input
-          type="checkbox"
+      <View>
+        <CheckBox
           value={task.isCompleted}
-          defaultChecked={task.isCompleted}
-          onClick={() => toggleBoolean(task.id)}
+          onValueChange={() => toggleBoolean(task.id)}
         />
-        <span className={task.isCompleted ? 'completed' : ''}>{task.text}</span>
-        <input
-          type="text"
+        <Text>{task.text}</Text>
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           defaultValue={task.text}
-          onChange={(evt) => this.updateEditInputValue(evt)}
+          onChangeText={(text) => this.updateEditInputValue(text)}
           className={this.isEdited ? '' : 'none'}
         />
-        <button
-          onClick={() => {
+        <Button
+          color="black"
+          title={this.isCompleted ? '完成編輯' : '編輯'}
+          onPress={() => {
             this.editTodo(task.id);
-          }}>
-          {this.isEdited ? '完成編輯' : '編輯'}
-        </button>
-        <button onClick={() => del(task.id)}>刪除</button>
-      </li>
+          }}
+        />
+
+        <Button
+          color="black"
+          title="刪除"
+          onPress={() => {
+            del(task.id);
+          }}
+        />
+      </View>
     );
   }
 }
+
 export default TodoItem;
