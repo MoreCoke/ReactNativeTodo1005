@@ -6,10 +6,10 @@ import {makeObservable, observable, action} from 'mobx';
 
 @observer
 class TodoItem extends React.Component {
-  editText = this.props.task.text;
+  editText = '';
   isEdited = false;
-
   constructor() {
+    super();
     makeObservable(this, {
       editText: observable,
       isEdited: observable,
@@ -18,12 +18,15 @@ class TodoItem extends React.Component {
     });
   }
 
-  updateEditInputValue = (evt) => {
-    this.editText = evt.target.value;
+  updateEditInputValue = (text) => {
+    this.editText = text;
   };
 
   editTodo = (id) => {
     const {editTodo} = this.props;
+    if (!this.editText) {
+      this.editText = this.props.task.text;
+    }
     editTodo(id, this.editText);
     this.isEdited = !this.isEdited;
   };
@@ -37,20 +40,23 @@ class TodoItem extends React.Component {
           onValueChange={() => toggleBoolean(task.id)}
         />
         <Text>{task.text}</Text>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          defaultValue={task.text}
-          onChangeText={(text) => this.updateEditInputValue(text)}
-          className={this.isEdited ? '' : 'none'}
-        />
+        {this.isEdited && (
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            defaultValue={task.text}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(text) => this.updateEditInputValue(text)}
+            className={this.isEdited ? '' : 'none'}
+          />
+        )}
         <Button
           color="black"
-          title={this.isCompleted ? '完成編輯' : '編輯'}
+          title={this.isEdited ? '完成編輯' : '編輯'}
           onPress={() => {
             this.editTodo(task.id);
           }}
         />
-
         <Button
           color="black"
           title="刪除"
