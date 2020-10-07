@@ -1,27 +1,36 @@
 import {makeObservable, observable, action} from 'mobx';
 
 export default class todoItemViewModel {
+  text = '';
   editText = '';
   isEdited = false;
-  constructor() {
+  isCompleted = false;
+  id = Math.random();
+  constructor(txt) {
     makeObservable(this, {
       editText: observable,
+      text: observable,
       isEdited: observable,
+      isCompleted: observable,
       updateEditInputValue: action,
       editTodo: action,
+      markTodo: action,
     });
+    this.text = txt;
   }
 
   updateEditInputValue = (text) => {
     this.editText = text;
   };
 
-  editTodo = (task, cb) => {
-    if (!this.editText) {
-      this.editText = task.text;
+  editTodo = () => {
+    if (this.editText) {
+      this.text = this.editText;
     }
-    // 從 todoViewModel 傳 editTodo 應該還能改得更好
-    cb(task.id, this.editText);
     this.isEdited = !this.isEdited;
+  };
+
+  markTodo = () => {
+    this.isCompleted = !this.isCompleted;
   };
 }

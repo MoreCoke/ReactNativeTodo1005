@@ -11,7 +11,6 @@ import {observer} from 'mobx-react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
@@ -61,7 +60,7 @@ class App extends React.Component {
               borderColor: 'gray',
               borderWidth: 1,
             }}
-            value={todoViewModel.text}
+            value={todoViewModel.addText}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={(text) => todoViewModel.updateAddInputValue(text)}
@@ -119,8 +118,8 @@ class App extends React.Component {
               keyExtractor={(element) => element['id'].toString()}
               renderItem={({item}) => (
                 <TodoItem
-                  todoViewModel={todoViewModel}
                   task={item}
+                  deleteTodo={todoViewModel.deleteTodo}
                   key={item['id']}
                 />
               )}

@@ -13,7 +13,7 @@ export const todosPerPage = 5;
 
 export default class todoViewModel {
   todos = [];
-  text = '';
+  addText = '';
   allCompleted = false;
   loading = false;
   page = 1;
@@ -28,15 +28,13 @@ export default class todoViewModel {
   constructor() {
     makeObservable(this, {
       todos: observable,
-      text: observable,
+      addText: observable,
       allCompleted: observable,
       loading: observable,
       todoItems: computed,
       updateAddInputValue: action,
       addTodo: action,
       deleteTodo: action,
-      editTodo: action,
-      markTodo: action,
       allTodo: action,
       allDoneTodo: action,
       query: action,
@@ -44,31 +42,17 @@ export default class todoViewModel {
   }
 
   updateAddInputValue = (text) => {
-    this.text = text;
+    this.addText = text;
   };
 
   addTodo = () => {
-    const todo = {
-      text: this.text,
-      isCompleted: false,
-      id: new Date().getTime(),
-      todoItemViewModel: new TodoItemViewModel(),
-    };
+    const todo = new TodoItemViewModel(this.addText);
     this.todos.unshift(todo);
-    this.text = '';
+    this.addText = '';
   };
 
   deleteTodo = (id) => {
     this.todos = this.todos.filter((element) => element['id'] !== id);
-  };
-
-  editTodo = (id, text) => {
-    const index = this.todos.map((element) => element['id']).indexOf(id);
-    this.todos[index].text = text;
-  };
-  markTodo = (id) => {
-    const index = this.todos.map((element) => element['id']).indexOf(id);
-    this.todos[index].isCompleted = !this.todos[index].isCompleted;
   };
 
   allTodo = () => {
@@ -84,11 +68,9 @@ export default class todoViewModel {
     const list = await delay(500).then(() => {
       const pageTodoStart = (this.page - 1) * 5;
       const pageTodoEnd = this.page * todosPerPage;
-      return fakeData.slice(pageTodoStart, pageTodoEnd).map((elemnt) => ({
-        ...elemnt,
-        isCompleted: false,
-        todoItemViewModel: new TodoItemViewModel(),
-      }));
+      return fakeData
+        .slice(pageTodoStart, pageTodoEnd)
+        .map((elemnt) => new TodoItemViewModel(elemnt.text));
     });
 
     if (list.length > 0) {
