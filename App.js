@@ -39,7 +39,7 @@ class App extends React.Component {
 
   render() {
     const topFlatList = (
-      <>
+      <View style={styles.headerView}>
         <Header />
         {global.HermesInternal == null ? null : (
           <View style={styles.engine}>
@@ -67,7 +67,22 @@ class App extends React.Component {
           />
           <Button color="black" title="新增" onPress={todoViewModel.addTodo} />
         </View>
-      </>
+        <View
+          style={[
+            {
+              flexDirection: 'row',
+              justifyContent: 'center',
+            },
+            styles.sectionContainer,
+          ]}>
+          <Button color="black" title="全部" onPress={todoViewModel.allTodo} />
+          <Button
+            color="black"
+            title="已完成"
+            onPress={todoViewModel.allDoneTodo}
+          />
+        </View>
+      </View>
     );
     const bottomFlatList = (
       <>
@@ -86,16 +101,10 @@ class App extends React.Component {
           style={[
             {
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
             },
             styles.sectionContainer,
           ]}>
-          <Button color="black" title="全部" onPress={todoViewModel.allTodo} />
-          <Button
-            color="black"
-            title="已完成"
-            onPress={todoViewModel.allDoneTodo}
-          />
           <Button
             color="black"
             title="載入更多"
@@ -115,6 +124,7 @@ class App extends React.Component {
               data={todoViewModel.todoItems}
               ListHeaderComponent={topFlatList}
               ListFooterComponent={bottomFlatList}
+              stickyHeaderIndices={[0]}
               keyExtractor={(element) => element['id'].toString()}
               renderItem={({item}) => (
                 <TodoItem
@@ -132,7 +142,7 @@ class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  headerView: {
     backgroundColor: Colors.lighter,
   },
   engine: {
