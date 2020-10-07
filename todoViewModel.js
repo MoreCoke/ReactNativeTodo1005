@@ -47,7 +47,9 @@ export default class todoViewModel {
 
   addTodo = () => {
     const todo = new TodoItemViewModel(this.addText);
-    this.todos.unshift(todo);
+    if (this.addText) {
+      this.todos.unshift(todo);
+    }
     this.addText = '';
   };
 
