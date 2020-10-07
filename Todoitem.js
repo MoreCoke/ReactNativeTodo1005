@@ -10,41 +10,38 @@ class TodoItem extends React.Component {
   }
   render() {
     const {
-      // task 解構優化？
       task,
       todoViewModel: {deleteTodo, markTodo, editTodo},
     } = this.props;
+    const {isCompleted, id, text, todoItemViewModel} = task;
     return (
       <View>
-        <CheckBox
-          value={task.isCompleted}
-          onValueChange={() => markTodo(task.id)}
-        />
-        <Text>{task.text}</Text>
-        {task.todoItemViewModel.isEdited && (
+        <CheckBox value={isCompleted} onValueChange={() => markTodo(id)} />
+        <Text>{text}</Text>
+        {todoItemViewModel.isEdited && (
           <TextInput
             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            defaultValue={task.text}
+            defaultValue={text}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={(text) =>
-              task.todoItemViewModel.updateEditInputValue(text)
+              todoItemViewModel.updateEditInputValue(text)
             }
-            className={task.todoItemViewModel.isEdited ? '' : 'none'}
+            className={todoItemViewModel.isEdited ? '' : 'none'}
           />
         )}
         <Button
           color="black"
-          title={task.todoItemViewModel.isEdited ? '完成編輯' : '編輯'}
+          title={todoItemViewModel.isEdited ? '完成編輯' : '編輯'}
           onPress={() => {
-            task.todoItemViewModel.editTodo(task, editTodo);
+            todoItemViewModel.editTodo(task, editTodo);
           }}
         />
         <Button
           color="black"
           title="刪除"
           onPress={() => {
-            deleteTodo(task.id);
+            deleteTodo(id);
           }}
         />
       </View>
