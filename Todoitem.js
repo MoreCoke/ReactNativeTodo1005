@@ -2,9 +2,6 @@ import React from 'react';
 import {View, Text, TextInput, Button} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {observer} from 'mobx-react';
-import TodoItemViewModel from './todoItemViewModel';
-
-const todoItemViewModel = new TodoItemViewModel();
 
 @observer
 class TodoItem extends React.Component {
@@ -12,38 +9,42 @@ class TodoItem extends React.Component {
     super();
   }
   render() {
-    const {task, toggleBoolean, del, editTodo} = this.props;
+    const {
+      // task 解構優化？
+      task,
+      todoViewModel: {deleteTodo, markTodo, editTodo},
+    } = this.props;
     return (
       <View>
         <CheckBox
           value={task.isCompleted}
-          onValueChange={() => toggleBoolean(task.id)}
+          onValueChange={() => markTodo(task.id)}
         />
         <Text>{task.text}</Text>
-        {todoItemViewModel.isEdited && (
+        {task.todoItemViewModel.isEdited && (
           <TextInput
             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
             defaultValue={task.text}
             autoCapitalize="none"
             autoCorrect={false}
             onChangeText={(text) =>
-              todoItemViewModel.updateEditInputValue(text)
+              task.todoItemViewModel.updateEditInputValue(text)
             }
-            className={todoItemViewModel.isEdited ? '' : 'none'}
+            className={task.todoItemViewModel.isEdited ? '' : 'none'}
           />
         )}
         <Button
           color="black"
-          title={todoItemViewModel.isEdited ? '完成編輯' : '編輯'}
+          title={task.todoItemViewModel.isEdited ? '完成編輯' : '編輯'}
           onPress={() => {
-            todoItemViewModel.editTodo(task, editTodo);
+            task.todoItemViewModel.editTodo(task, editTodo);
           }}
         />
         <Button
           color="black"
           title="刪除"
           onPress={() => {
-            del(task.id);
+            deleteTodo(task.id);
           }}
         />
       </View>

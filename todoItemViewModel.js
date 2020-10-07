@@ -20,6 +20,7 @@ export default class todoItemViewModel {
     if (!this.editText) {
       this.editText = task.text;
     }
+    // 從 todoViewModel 傳 editTodo 應該還能改得更好
     cb(task.id, this.editText);
     this.isEdited = !this.isEdited;
   };

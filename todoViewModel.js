@@ -7,6 +7,7 @@ import {
   makeObservable,
 } from 'mobx';
 import {delay, fakeData} from './utils';
+import TodoItemViewModel from './todoItemViewModel';
 
 export const todosPerPage = 5;
 
@@ -44,7 +45,6 @@ export default class todoViewModel {
 
   updateAddInputValue = (text) => {
     this.text = text;
-    console.log('updateAddInputValue', this.text);
   };
 
   addTodo = () => {
@@ -52,8 +52,8 @@ export default class todoViewModel {
       text: this.text,
       isCompleted: false,
       id: new Date().getTime(),
+      todoItemViewModel: new TodoItemViewModel(),
     };
-    console.log('this from todoViewModel', this);
     this.todos.unshift(todo);
     this.text = '';
   };
@@ -87,6 +87,7 @@ export default class todoViewModel {
       return fakeData.slice(pageTodoStart, pageTodoEnd).map((elemnt) => ({
         ...elemnt,
         isCompleted: false,
+        todoItemViewModel: new TodoItemViewModel(),
       }));
     });
 
