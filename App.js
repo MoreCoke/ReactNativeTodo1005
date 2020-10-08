@@ -19,6 +19,8 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {create} from 'mobx-persist';
 
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -26,6 +28,13 @@ import TodoItem from './Todoitem';
 import TodoViewModel from './todoViewModel';
 
 const todoViewModel = new TodoViewModel();
+
+const hydrate = create({
+  storage: AsyncStorage,
+});
+hydrate('todoViewModel', todoViewModel).then(() =>
+  console.log('todoViewModel has been hydrated'),
+);
 
 @observer
 class App extends React.Component {
