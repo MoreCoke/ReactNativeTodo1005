@@ -42,6 +42,7 @@ class App extends React.Component {
       console.log('todoViewModel has been hydrated');
       runInAction(() => (todoViewModel.isHydrateFinished = true));
     });
+    // await AsyncStorage.clear(); //清空資料
   }
 
   componentWillUnmount() {
