@@ -6,46 +6,45 @@ import {
   runInAction,
   makeObservable,
 } from 'mobx';
+import {persist} from 'mobx-persist';
+import AsyncStorage from '@react-native-community/async-storage';
+import {create} from 'mobx-persist';
+
 import {delay, fakeData} from './utils';
 import TodoItemViewModel from './todoItemViewModel';
 
 export const todosPerPage = 5;
 
+const hydrate = create({
+  storage: AsyncStorage,
+});
+hydrate('todoViewModel', todoViewModel).then(() =>
+  console.log('todoViewModel has been hydrated'),
+);
+
 export default class todoViewModel {
-  todos = [];
-  addText = '';
-  allCompleted = false;
-  loading = false;
+  @persist('list', TodoItemViewModel) @observable todos = [];
+  @observable addText = '';
+  @observable allCompleted = false;
+  @observable loading = false;
   page = 1;
   logReaction = null;
 
-  get todoItems() {
+  @computed get todoItems() {
     return this.todos.filter((element) =>
       this.allCompleted ? element['isCompleted'] : true,
     );
   }
 
   constructor() {
-    makeObservable(this, {
-      todos: observable,
-      addText: observable,
-      allCompleted: observable,
-      loading: observable,
-      todoItems: computed,
-      updateAddInputValue: action,
-      addTodo: action,
-      deleteTodo: action,
-      allTodo: action,
-      allDoneTodo: action,
-      query: action,
-    });
+    makeObservable(this);
   }
 
-  updateAddInputValue = (text) => {
+  @action updateAddInputValue = (text) => {
     this.addText = text;
   };
 
-  addTodo = () => {
+  @action addTodo = () => {
     const todo = new TodoItemViewModel(this.addText);
     if (this.addText) {
       this.todos.unshift(todo);
@@ -53,19 +52,19 @@ export default class todoViewModel {
     this.addText = '';
   };
 
-  deleteTodo = (id) => {
+  @action deleteTodo = (id) => {
     this.todos = this.todos.filter((element) => element['id'] !== id);
   };
 
-  allTodo = () => {
+  @action allTodo = () => {
     this.allCompleted = false;
   };
 
-  allDoneTodo = () => {
+  @action allDoneTodo = () => {
     this.allCompleted = true;
   };
 
-  query = async () => {
+  @action query = async () => {
     this.loading = true;
     const list = await delay(500).then(() => {
       const pageTodoStart = (this.page - 1) * 5;

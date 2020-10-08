@@ -1,36 +1,29 @@
 import {makeObservable, observable, action} from 'mobx';
+import {persist} from 'mobx-persist';
 
 export default class todoItemViewModel {
-  text = '';
-  editText = '';
-  isEdited = false;
-  isCompleted = false;
+  @persist @observable text = '';
+  @persist @observable editText = '';
+  @persist @observable isEdited = false;
+  @persist @observable isCompleted = false;
   id = Math.random();
   constructor(txt) {
-    makeObservable(this, {
-      editText: observable,
-      text: observable,
-      isEdited: observable,
-      isCompleted: observable,
-      updateEditInputValue: action,
-      editTodo: action,
-      markTodo: action,
-    });
+    makeObservable(this);
     this.text = txt;
   }
 
-  updateEditInputValue = (text) => {
+  @action updateEditInputValue = (text) => {
     this.editText = text;
   };
 
-  editTodo = () => {
+  @action editTodo = () => {
     if (this.editText) {
       this.text = this.editText;
     }
     this.isEdited = !this.isEdited;
   };
 
-  markTodo = () => {
+  @action markTodo = () => {
     this.isCompleted = !this.isCompleted;
   };
 }
