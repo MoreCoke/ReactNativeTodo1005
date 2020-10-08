@@ -10,8 +10,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/checkbox": "^0.5.5",
     "mobx": "^6.0.1",
+    "mobx-persist": "^0.4.1",
     "mobx-react": "^7.0.0",
     "react": "16.13.1",
     "react-native": "0.63.3"
