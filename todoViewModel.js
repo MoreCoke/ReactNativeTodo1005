@@ -7,26 +7,18 @@ import {
   makeObservable,
 } from 'mobx';
 import {persist} from 'mobx-persist';
-import AsyncStorage from '@react-native-community/async-storage';
-import {create} from 'mobx-persist';
 
 import {delay, fakeData} from './utils';
 import TodoItemViewModel from './todoItemViewModel';
 
 export const todosPerPage = 5;
 
-const hydrate = create({
-  storage: AsyncStorage,
-});
-hydrate('todoViewModel', todoViewModel).then(() =>
-  console.log('todoViewModel has been hydrated'),
-);
-
 export default class todoViewModel {
   @persist('list', TodoItemViewModel) @observable todos = [];
   @observable addText = '';
   @observable allCompleted = false;
   @observable loading = false;
+  @observable isHydrateFinished = false;
   page = 1;
   logReaction = null;
 

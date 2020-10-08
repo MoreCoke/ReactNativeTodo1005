@@ -20,6 +20,7 @@ import {
   FlatList,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {runInAction} from 'mobx';
 import {create} from 'mobx-persist';
 
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
@@ -32,14 +33,15 @@ const todoViewModel = new TodoViewModel();
 const hydrate = create({
   storage: AsyncStorage,
 });
-hydrate('todoViewModel', todoViewModel).then(() =>
-  console.log('todoViewModel has been hydrated'),
-);
 
 @observer
 class App extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     todoViewModel.appInit();
+    await hydrate('todoViewModel', todoViewModel).then(() => {
+      console.log('todoViewModel has been hydrated');
+      runInAction(() => (todoViewModel.isHydrateFinished = true));
+    });
   }
 
   componentWillUnmount() {
@@ -124,28 +126,30 @@ class App extends React.Component {
     );
 
     return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <View style={styles.body}>
-            <FlatList
-              style={styles.sectionContainer}
-              data={todoViewModel.todoItems}
-              ListHeaderComponent={topFlatList}
-              ListFooterComponent={bottomFlatList}
-              stickyHeaderIndices={[0]}
-              keyExtractor={(element) => element['id'].toString()}
-              renderItem={({item}) => (
-                <TodoItem
-                  task={item}
-                  deleteTodo={todoViewModel.deleteTodo}
-                  key={item['id']}
-                />
-              )}
-            />
-          </View>
-        </SafeAreaView>
-      </>
+      todoViewModel.isHydrateFinished && (
+        <>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView>
+            <View style={styles.body}>
+              <FlatList
+                style={styles.sectionContainer}
+                data={todoViewModel.todoItems}
+                ListHeaderComponent={topFlatList}
+                ListFooterComponent={bottomFlatList}
+                stickyHeaderIndices={[0]}
+                keyExtractor={(element) => element['id'].toString()}
+                renderItem={({item}) => (
+                  <TodoItem
+                    task={item}
+                    deleteTodo={todoViewModel.deleteTodo}
+                    key={item['id']}
+                  />
+                )}
+              />
+            </View>
+          </SafeAreaView>
+        </>
+      )
     );
   }
 }
