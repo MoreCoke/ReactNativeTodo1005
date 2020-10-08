@@ -8,7 +8,7 @@ import {
 } from 'mobx';
 import {persist} from 'mobx-persist';
 
-import {delay, fakeData} from './utils';
+import {delay, fakeData} from '../utils';
 import TodoItemViewModel from './todoItemViewModel';
 
 export const todosPerPage = 5;

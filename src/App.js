@@ -25,8 +25,8 @@ import {create} from 'mobx-persist';
 
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
-import TodoItem from './Todoitem';
-import TodoViewModel from './todoViewModel';
+import TodoItem from './components/Todoitem';
+import TodoViewModel from './viewModels/todoViewModel';
 
 const todoViewModel = new TodoViewModel();
 
