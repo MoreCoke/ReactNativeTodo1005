@@ -18,7 +18,6 @@ export default class todoViewModel {
   @observable addText = '';
   @observable allCompleted = false;
   @observable loading = false;
-  @observable isHydrateFinished = false;
   page = 1;
   logReaction = null;
 
