@@ -106,7 +106,8 @@ class TodoList extends React.Component {
       <FlatList
         style={styles.sectionContainer}
         data={todoViewModel.todoItems}
-        ListHeaderComponent={this.renderListHeader}
+        // 加 () 的差別是什麼, 目前得知加了 addText 就會更新正常
+        ListHeaderComponent={this.renderListHeader()}
         ListFooterComponent={this.renderListFooter}
         stickyHeaderIndices={[0]}
         keyExtractor={(element) => element['id'].toString()}
