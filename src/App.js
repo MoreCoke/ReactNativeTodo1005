@@ -6,7 +6,8 @@ import {SafeAreaView, StyleSheet, View, StatusBar} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import TodoList, {init} from './components/TodoList';
+import Stores from './stores';
+import TodoList from './components/TodoList';
 
 @observer
 class App extends React.Component {
@@ -18,7 +19,7 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    await init.then(() => {
+    await Stores.init().then(() => {
       runInAction(() => (this.isHydrateFinished = true));
     });
     // await AsyncStorage.clear(); //清空資料
@@ -26,16 +27,14 @@ class App extends React.Component {
 
   render() {
     return (
-      this.isHydrateFinished && (
-        <>
-          <StatusBar barStyle="dark-content" />
-          <SafeAreaView>
-            <View style={styles.body}>
-              {this.isHydrateFinished && <TodoList />}
-            </View>
-          </SafeAreaView>
-        </>
-      )
+      <>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <View style={styles.body}>
+            {this.isHydrateFinished && <TodoList />}
+          </View>
+        </SafeAreaView>
+      </>
     );
   }
 }

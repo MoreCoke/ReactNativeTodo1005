@@ -6,15 +6,15 @@ import {
   runInAction,
   makeObservable,
 } from 'mobx';
-import {persist} from 'mobx-persist';
 
 import {delay, fakeData} from '../utils';
 import TodoItemViewModel from './todoItemViewModel';
+import GlobalStore from '../stores/global';
 
 export const todosPerPage = 5;
 
 export default class todoViewModel {
-  @persist('list', TodoItemViewModel) @observable todos = [];
+  @observable todos = [];
   @observable addText = '';
   @observable allCompleted = false;
   @observable loading = false;
@@ -36,7 +36,7 @@ export default class todoViewModel {
   };
 
   @action addTodo = () => {
-    const todo = new TodoItemViewModel(this.addText);
+    const todo = new TodoItemViewModel({text: this.addText});
     if (this.addText) {
       this.todos.unshift(todo);
     }
@@ -62,7 +62,7 @@ export default class todoViewModel {
       const pageTodoEnd = this.page * todosPerPage;
       return fakeData
         .slice(pageTodoStart, pageTodoEnd)
-        .map((elemnt) => new TodoItemViewModel(elemnt.text));
+        .map((elemnt) => new TodoItemViewModel({text: elemnt.text}));
     });
 
     if (list.length > 0) {
@@ -75,12 +75,25 @@ export default class todoViewModel {
     });
   };
 
-  appInit = () => {
-    this.query();
+  @action appInit = () => {
+    // restore
+    this.todos = GlobalStore.todos.map((t) => new TodoItemViewModel(t));
+    console.log('this.todos ', this.todos);
     this.logReaction = reaction(
-      () => this.todos.map((element) => element.text),
-      (text) => console.log(text),
+      () => this.todos.length,
+      () => {
+        // update stores
+        GlobalStore.updateTodos(this.todos);
+      },
     );
+
+    // this.query(); // comment out for testing store / restore `todos`.
+
+    // this.query();
+    // this.logReaction = reaction(
+    //   () => this.todos.map((element) => element.text),
+    //   (text) => console.log(text),
+    // );
   };
 
   appDie = () => {

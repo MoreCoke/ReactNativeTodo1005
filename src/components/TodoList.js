@@ -9,20 +9,12 @@ import {
   FlatList,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AsyncStorage from '@react-native-community/async-storage';
-import {create} from 'mobx-persist';
 
 import TodoItem from './Todoitem';
 import TodoViewModel from '../viewModels/todoViewModel';
 
 const todoViewModel = new TodoViewModel();
-const hydrate = create({
-  storage: AsyncStorage,
-});
 
-export const init = hydrate('todoViewModel', todoViewModel).then(() => {
-  console.log('todoViewModel has been hydrated');
-});
 @observer
 class TodoList extends React.Component {
   componentDidMount() {
