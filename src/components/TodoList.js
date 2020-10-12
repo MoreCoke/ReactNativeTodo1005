@@ -100,7 +100,7 @@ class TodoList extends React.Component {
         data={todoViewModel.todoItems}
         // 加 () 的差別是什麼, 目前得知加了 addText 就會更新正常
         ListHeaderComponent={this.renderListHeader()}
-        ListFooterComponent={this.renderListFooter}
+        ListFooterComponent={this.renderListFooter()}
         stickyHeaderIndices={[0]}
         keyExtractor={(element) => element['id'].toString()}
         renderItem={({item}) => (
