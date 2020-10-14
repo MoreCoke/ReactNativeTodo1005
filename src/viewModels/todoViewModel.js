@@ -78,12 +78,12 @@ export default class todoViewModel {
   @action appInit = () => {
     // restore
     this.todos = GlobalStore.todos.map((t) => new TodoItemViewModel(t));
-    console.log('this.todos ', this.todos);
     this.logReaction = reaction(
       () => this.todos.length,
       () => {
         // update stores
         GlobalStore.updateTodos(this.todos);
+        console.log('this.todos: ', this.todos);
       },
     );
 
