@@ -8,6 +8,8 @@ target 'ReactNativeTodo1005' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'ReactNativeTodo1005Tests' do
     inherit! :complete
     # Pods for testing
