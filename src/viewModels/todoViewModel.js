@@ -23,7 +23,7 @@ export default class todoViewModel {
 
   @computed get todoItems() {
     return this.todos.filter((element) =>
-      this.allCompleted ? element['isCompleted'] : true,
+      this.allCompleted ? element.isCompleted : true,
     );
   }
 
@@ -44,7 +44,7 @@ export default class todoViewModel {
   };
 
   @action deleteTodo = (id) => {
-    this.todos = this.todos.filter((element) => element['id'] !== id);
+    this.todos = this.todos.filter((element) => element.id !== id);
   };
 
   @action allTodo = () => {

@@ -93,12 +93,12 @@ class TodoList extends React.Component {
         ListHeaderComponent={this.renderListHeader}
         ListFooterComponent={this.renderListFooter}
         stickyHeaderIndices={[0]}
-        keyExtractor={(element) => element['id'].toString()}
+        keyExtractor={(element) => element.id.toString()}
         renderItem={({item}) => (
           <TodoItem
             task={item}
             deleteTodo={todoViewModel.deleteTodo}
-            key={item['id']}
+            key={item.id}
           />
         )}
       />
