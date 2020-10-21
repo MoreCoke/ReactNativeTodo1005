@@ -4,9 +4,9 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import Home from './page/Home';
-import Test from './page/Test';
-import Loading from './page/Loading';
+import Home from './screen/Home';
+import Test from './screen/Test';
+import Loading from './screen/Loading';
 import {delay} from './utils';
 
 const Tab = createBottomTabNavigator();
@@ -15,9 +15,8 @@ const App = function () {
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     const init = async () => {
-      await delay(100).then(() => {
-        setLoading(true);
-      });
+      await delay(100);
+      setLoading(true);
     };
     init();
     SplashScreen.hide();
