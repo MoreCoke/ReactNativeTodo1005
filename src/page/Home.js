@@ -1,15 +1,18 @@
 import React from 'react';
 import {StatusBar, SafeAreaView, View, StyleSheet} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
 // import AsyncStorage from '@react-native-community/async-storage';
 import {observer} from 'mobx-react';
 import {makeObservable, observable, runInAction} from 'mobx';
 
-import Stores from '../stores';
 import TodoList from '../components/TodoList';
 import Store from '../stores';
+import EditPage from './Edit';
+
+const Stack = createStackNavigator();
 
 @observer
-class Home extends React.Component {
+class HomePage extends React.Component {
   @observable isHydrateFinished = false;
 
   constructor(props) {
@@ -18,7 +21,7 @@ class Home extends React.Component {
   }
 
   async componentDidMount() {
-    await Stores.init().then(() => {
+    await Store.init().then(() => {
       runInAction(() => (this.isHydrateFinished = true));
     });
     // await AsyncStorage.clear(); // 清空資料
@@ -42,4 +45,16 @@ const styles = StyleSheet.create({
   },
 });
 
+function Home() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomePage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="Edit" component={EditPage} />
+    </Stack.Navigator>
+  );
+}
 export default Home;
