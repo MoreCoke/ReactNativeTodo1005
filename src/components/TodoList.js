@@ -29,11 +29,7 @@ class TodoList extends React.Component {
     <View style={styles.headerView}>
       <View style={styles.sectionContainer}>
         <TextInput
-          style={{
-            height: 40,
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
+          style={styles.addInputText}
           value={todoViewModel.addText}
           autoCapitalize="none"
           autoCorrect={false}
@@ -41,14 +37,7 @@ class TodoList extends React.Component {
         />
         <Button color="black" title="新增" onPress={todoViewModel.addTodo} />
       </View>
-      <View
-        style={[
-          {
-            flexDirection: 'row',
-            justifyContent: 'center',
-          },
-          styles.sectionContainer,
-        ]}>
+      <View style={[styles.viewCenter, styles.sectionContainer]}>
         <Button color="black" title="全部" onPress={todoViewModel.allTodo} />
         <Button
           color="black"
@@ -72,14 +61,7 @@ class TodoList extends React.Component {
           />
         </View>
       )}
-      <View
-        style={[
-          {
-            flexDirection: 'row',
-            justifyContent: 'center',
-          },
-          styles.sectionContainer,
-        ]}>
+      <View style={[styles.viewCenter, styles.sectionContainer]}>
         <Button color="black" title="載入更多" onPress={todoViewModel.query} />
       </View>
     </>
@@ -128,6 +110,15 @@ const styles = StyleSheet.create({
   loading: {
     width: 100,
     height: 100,
+  },
+  addInputText: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  viewCenter: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 

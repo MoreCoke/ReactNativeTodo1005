@@ -1,6 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {SafeAreaView, View, Button, TextInput, Modal, Text} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Button,
+  TextInput,
+  Modal,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import {observer} from 'mobx-react';
 
 const Edit = observer(({route, navigation}) => {
@@ -13,12 +21,7 @@ const Edit = observer(({route, navigation}) => {
       style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <View>
         <TextInput
-          style={{
-            width: 200,
-            height: 40,
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
+          style={styles.updateEDitInput}
           defaultValue={text}
           autoCapitalize="none"
           autoCorrect={false}
@@ -41,33 +44,9 @@ const Edit = observer(({route, navigation}) => {
           }}
         />
         <Modal transparent={true} visible={isShow}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                backgroundColor: 'white',
-                margin: 20,
-                padding: 15,
-                width: 200,
-                height: 200,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 20,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowRadius: 4,
-              }}>
-              <Text
-                style={{textAlign: 'center', fontSize: 20, paddingBottom: 16}}>
-                確定刪除？
-              </Text>
+          <View style={styles.modalOutside}>
+            <View style={styles.modalInside}>
+              <Text style={styles.delText}>確定刪除？</Text>
               <Button
                 title="確定"
                 onPress={() => {
@@ -87,6 +66,37 @@ const Edit = observer(({route, navigation}) => {
       </View>
     </SafeAreaView>
   );
+});
+
+const styles = StyleSheet.create({
+  updateEDitInput: {
+    width: 200,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  modalOutside: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalInside: {
+    backgroundColor: 'white',
+    margin: 20,
+    padding: 15,
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 4,
+  },
+  delText: {textAlign: 'center', fontSize: 20, paddingBottom: 16},
 });
 
 export default Edit;

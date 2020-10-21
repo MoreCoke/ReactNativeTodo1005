@@ -1,14 +1,6 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
-import {useNavigation, Link} from '@react-navigation/native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import {observer} from 'mobx-react';
 
@@ -35,7 +27,7 @@ class TodoItem extends React.Component {
       <View>
         <View style={styles.titleLayout}>
           <CheckBox
-            style={{marginRight: 16}}
+            style={styles.titleCheckBox}
             value={isCompleted}
             onValueChange={markTodo}
           />
@@ -52,36 +44,7 @@ class TodoItem extends React.Component {
             }>
             <Text style={styles.title}>{text}</Text>
           </TouchableOpacity>
-          {/* <Link style={styles.title} to={`/Edit/${id}`}>
-            {text}
-          </Link> */}
         </View>
-        {false && isEdited && (
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            defaultValue={text}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={(text) => updateEditInputValue(text)}
-            className={isEdited ? '' : 'none'}
-          />
-        )}
-        {false && (
-          <Button
-            color="black"
-            title={isEdited ? '完成編輯' : '編輯'}
-            onPress={editTodo}
-          />
-        )}
-        {false && (
-          <Button
-            color="black"
-            title="刪除"
-            onPress={() => {
-              deleteTodo(id);
-            }}
-          />
-        )}
       </View>
     );
   }
@@ -95,6 +58,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
   },
+  titleCheckBox: {marginRight: 16},
 });
 
 export default function (props) {
