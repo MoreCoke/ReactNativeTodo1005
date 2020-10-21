@@ -1,36 +1,43 @@
 import React, {useEffect, useState} from 'react';
-import SplashScreen from 'react-native-splash-screen';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+// import AsyncStorage from '@react-native-community/async-storage';
 
-import Home from './screen/Home';
-import Test from './screen/Test';
-import Loading from './screen/Loading';
+import HomeScreen from './screen/Home';
+import SplashScreen from './screen/Splash';
+import Store from './stores';
 import {delay} from './utils';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const App = function () {
-  const [isLoading, setLoading] = useState(false);
+  const [isHydrateLoading, setHydrateLoading] = useState(true);
   useEffect(() => {
     const init = async () => {
-      await delay(100);
-      setLoading(true);
+      await Promise.all([delay(2000), Store.init()]);
+      setHydrateLoading(false);
+      // await AsyncStorage.clear(); // 清空資料
     };
     init();
-    SplashScreen.hide();
   }, []);
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        {isLoading ? (
-          <Tab.Screen name="Home" component={Home} />
+      <Stack.Navigator>
+        {isHydrateLoading ? (
+          <Stack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{headerShown: false}}
+          />
         ) : (
-          <Tab.Screen name="Loading" component={Loading} />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{headerShown: false}}
+          />
         )}
-        <Tab.Screen name="Test" component={Test} />
-      </Tab.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

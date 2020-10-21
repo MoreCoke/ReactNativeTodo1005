@@ -1,7 +1,7 @@
 import React from 'react';
 import {SafeAreaView, View, Text, Image, StyleSheet} from 'react-native';
 
-export default function Loading() {
+function Splash() {
   return (
     <SafeAreaView style={styles.loadingLayout}>
       <View>
@@ -32,3 +32,5 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
 });
+
+export default Splash;
