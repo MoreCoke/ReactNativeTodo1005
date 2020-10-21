@@ -15,7 +15,7 @@ const App = function () {
   const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     const init = async () => {
-      await delay(4000).then(() => {
+      await delay(100).then(() => {
         setLoading(true);
       });
     };
