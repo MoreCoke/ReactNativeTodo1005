@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 // import AsyncStorage from '@react-native-community/async-storage';
+import {PortalExit, PortalProvider} from 'react-native-gateway';
 
 import HomeScreen from './screen/Home';
 import SplashScreen from './screen/Splash';
@@ -22,23 +23,26 @@ const App = function () {
     init();
   }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isHydrateLoading ? (
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{headerShown: false}}
-          />
-        ) : (
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{headerShown: false}}
-          />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <PortalProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isHydrateLoading ? (
+            <Stack.Screen
+              name="Splash"
+              component={SplashScreen}
+              options={{headerShown: false}}
+            />
+          ) : (
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{headerShown: false}}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      <PortalExit />
+    </PortalProvider>
   );
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   SafeAreaView,
@@ -9,32 +8,45 @@ import {
   StyleSheet,
 } from 'react-native';
 import {observer} from 'mobx-react';
-import {PortalEnter, PortalExit, PortalProvider} from 'react-native-gateway';
+import {PortalEnter} from 'react-native-gateway';
+import {delay} from '../utils';
 
 const Edit = observer(({route, navigation}) => {
-  const {
-    params: {id, text, editTodo, updateEditInputValue, deleteTodo},
-  } = route;
+  const {params} = route;
   const [isShow, setIsShow] = useState(false);
-
+  const [isLoading, setLoading] = useState(true);
+  React.useEffect(() => {
+    const loading = navigation.addListener('focus', async () => {
+      await delay(500);
+      setLoading(!isLoading);
+    });
+    const leave = navigation.addListener('blur', () => console.log('bye'));
+    return () => {
+      loading();
+      leave();
+    };
+  });
   return (
-    <PortalProvider>
-      <SafeAreaView
-        style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <SafeAreaView style={styles.viewCenter}>
+      {isLoading ? (
+        <View>
+          <Text style={styles.loadingText}>Loading</Text>
+        </View>
+      ) : (
         <View>
           <TextInput
             style={styles.updateEDitInput}
-            defaultValue={text}
+            defaultValue={params.text}
             autoCapitalize="none"
             autoCorrect={false}
-            onChangeText={updateEditInputValue}
+            onChangeText={params.updateEditInputValue}
           />
 
           <Button
             color="black"
             title="完成編輯"
             onPress={() => {
-              editTodo();
+              params.editTodo();
               navigation.goBack();
             }}
           />
@@ -46,35 +58,42 @@ const Edit = observer(({route, navigation}) => {
             }}
           />
         </View>
-        <PortalEnter name="modal">
-          {isShow && (
-            <View style={styles.modalOutside}>
-              <View style={styles.modalInside}>
-                <Text style={styles.delText}>確定刪除？</Text>
-                <Button
-                  title="確定"
-                  onPress={() => {
-                    deleteTodo(id);
-                    navigation.goBack();
-                  }}
-                />
-                <Button
-                  title="取消"
-                  onPress={() => {
-                    setIsShow(!isShow);
-                  }}
-                />
-              </View>
+      )}
+      <PortalEnter name="modal">
+        {isShow && (
+          <View style={styles.modalOutside}>
+            <View style={styles.modalInside}>
+              <Text style={styles.delText}>確定刪除？</Text>
+              <Button
+                title="確定"
+                onPress={() => {
+                  params.deleteTodo(params.id);
+                  navigation.goBack();
+                }}
+              />
+              <Button
+                title="取消"
+                onPress={() => {
+                  setIsShow(!isShow);
+                }}
+              />
             </View>
-          )}
-        </PortalEnter>
-        <PortalExit />
-      </SafeAreaView>
-    </PortalProvider>
+          </View>
+        )}
+      </PortalEnter>
+    </SafeAreaView>
   );
 });
 
 const styles = StyleSheet.create({
+  viewCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 50,
+  },
   updateEDitInput: {
     width: 200,
     height: 40,
