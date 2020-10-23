@@ -10,39 +10,27 @@ class TodoItem extends React.Component {
     super();
   }
   render() {
-    const {
-      task: {
-        isCompleted,
-        id,
-        text,
-        isEdited,
-        updateEditInputValue,
-        editTodo,
-        markTodo,
-      },
-      deleteTodo,
-      navigation,
-    } = this.props;
+    const {task, deleteTodo, navigation} = this.props;
     return (
       <View>
         <View style={styles.titleLayout}>
           <CheckBox
             style={styles.titleCheckBox}
-            value={isCompleted}
-            onValueChange={markTodo}
+            value={task.isCompleted}
+            onValueChange={task.markTodo}
           />
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('Edit', {
-                id,
-                text,
-                isEdited,
-                updateEditInputValue,
-                editTodo,
+                id: task.id,
+                text: task.text,
+                isEdited: task.isEdited,
+                updateEditInputValue: task.updateEditInputValue,
+                editTodo: task.editTodo,
                 deleteTodo,
               })
             }>
-            <Text style={styles.title}>{text}</Text>
+            <Text style={styles.title}>{task.text}</Text>
           </TouchableOpacity>
         </View>
       </View>
