@@ -1,7 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, View, Text, Image, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
-function Splash() {
+import Store from '../../stores';
+import {delay} from '../../utils';
+
+function Splash({navigation}) {
+  useEffect(() => {
+    const init = async () => {
+      await Promise.all([delay(2000), Store.init()]);
+      // await AsyncStorage.clear(); // 清空資料
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+    };
+    init();
+  }, [navigation]);
   return (
     <SafeAreaView style={styles.loadingLayout}>
       <View>
