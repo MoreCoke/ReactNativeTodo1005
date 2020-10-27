@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {observer} from 'mobx-react';
 import {PortalEnter} from 'react-native-gateway';
-import {delay} from '../utils';
+import {delay} from '../../utils';
 
 const Edit = observer(({route, navigation}) => {
   const {params} = route;
