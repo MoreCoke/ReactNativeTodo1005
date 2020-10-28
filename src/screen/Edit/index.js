@@ -10,13 +10,46 @@ import {
 import {observer} from 'mobx-react';
 import {PortalEnter} from 'react-native-gateway';
 
-import Navigation from '../../viewModels/Navigation';
+import BaseScreen from '../../components/BaseScreen';
+import {delay} from '../../utils';
 
 @observer
-class Edits extends Navigation {
+class Edits extends BaseScreen {
   constructor() {
     super();
+    this.state = {
+      isShow: false,
+      isLoading: true,
+    };
   }
+
+  onScreenEnter = async () => {
+    super.onScreenEnter();
+    await delay(500);
+    this.setState({isLoading: false});
+  };
+
+  onScreenLeave = () => {
+    super.onScreenLeave();
+    this.setState({isLoading: true});
+    console.log('Bye');
+  };
+
+  onAndroidBack = () => {
+    super.onAndroidBack();
+    if (this.state.isShow) {
+      this.setState({isShow: false});
+      return true;
+    }
+  };
+
+  openShow = () => {
+    this.setState({isShow: true});
+  };
+
+  closeShow = () => {
+    this.setState({isShow: false});
+  };
 
   render() {
     const {isShow, isLoading} = this.state;
